@@ -50,9 +50,9 @@ public:
 
 	void* GetBuffer() const;
 
-	int length() const;
+	size_t length() const;
 
-	int size() const;
+	size_t size() const;
 
 	// 强制修改深拷贝标志 [7/17/2019 kyske]
 	void SetDeepCopy(bool bDeepCopy);
@@ -65,13 +65,13 @@ public:
 
 	bool IsEmpty();
 
-	void AttachBuffer(void* pBuffer, int nLen);
+	void AttachBuffer(void* pBuffer, size_t nLen);
 
-	void SetBuffer(void* pBuffer, int nLen);
+	void SetBuffer(void* pBuffer, size_t nLen);
 
 protected:
 
-	int  m_nBufferLength;
+	size_t  m_nBufferLength;
 	void* m_pBuffer;
 	bool m_bDeepCopy;
 	int m_nIndex;

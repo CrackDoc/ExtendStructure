@@ -5,7 +5,7 @@
 #include <vector>
 #include <locale.h>  
 #include <locale>  
-
+#include <assert.h>
 using std::locale;  
 
 namespace IOx
@@ -281,6 +281,7 @@ namespace IOx
 
 	void XFile::SplitDir(void *input) const
 	{
+		assert(input);
 		stlu::split(mAbsolutePath,"/",input);
 	}
 

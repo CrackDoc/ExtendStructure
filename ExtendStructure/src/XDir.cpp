@@ -13,6 +13,7 @@
 #include <sstream>
 #include <vector>
 #include <string.h>
+#include <assert.h>
 
 using std::locale;  
 
@@ -478,6 +479,7 @@ namespace IOx
 
 	bool XDir::getAllFiles(void* rLstFile, const char* strFilter)
 	{
+		assert(rLstFile);
 		std::vector<IOx::XFile>& rFiles= *static_cast<std::vector<IOx::XFile>*>(rLstFile);
 
 		find_directoryFiles(rFiles,mAbsolutePath,strFilter);
@@ -732,6 +734,7 @@ namespace IOx
 
 	bool XDir::SplitDir(void* input) const
 	{
+		assert(input);
 		return SplitDir(input, mAbsolutePath);
 	}
 
@@ -756,6 +759,7 @@ namespace IOx
 
 	void XDir::Normalize(void* input, const char* strDir)
 	{
+		assert(input);
 		std::vector<std::string> vDirs;
 		SplitDir(&vDirs,strDir);
 		std::stringstream ss;
@@ -779,6 +783,7 @@ namespace IOx
 
 	void XDir::GetPWD(void* input)
 	{
+		assert(input);
 		char szBuffer[256];
 		memset(szBuffer,'\0',sizeof(char)*256);
 		getcwd(szBuffer,256);

@@ -1,6 +1,7 @@
 #include "Vector3D.h"
 #include <sstream>
 #include <string>
+#include <assert.h>
 
 const CVector3D CVector3D::ZERO = CVector3D();
 
@@ -106,6 +107,7 @@ KFLOAT CVector3D::Sqrt() const
 
 void  CVector3D::ToString(void *input)
 {
+	assert(input);
 	std::stringstream ss;
 	ss << x << "_" << y << "_" << z;
 	std::string xyzstring = ss.str();

@@ -9,6 +9,7 @@
 #include <sstream>
 #include <list>
 #include <time.h>
+#include <assert.h>
 
 using std::locale;  
 
@@ -18,10 +19,7 @@ namespace stlu
 {
 	 bool upper(void* szstrSrc)
 	{
-		 if (!szstrSrc)
-		 {
-			 return false;
-		 }
+		 assert(szstrSrc);
 		 string& strSrc = *static_cast<string*>(szstrSrc);
 
 		 transform(strSrc.begin(), strSrc.end(), strSrc.begin(), ::toupper);
@@ -30,10 +28,7 @@ namespace stlu
 	}
 	bool lower(void* szstrSrc)
 	{
-		if (!szstrSrc)
-		{
-			return false;
-		}
+		assert(szstrSrc);
 		string& strSrc = *static_cast<string*>(szstrSrc);
 
 		transform(strSrc.begin(), strSrc.end(), strSrc.begin(), ::tolower);
@@ -42,10 +37,7 @@ namespace stlu
 	}
 	bool trimC(void* szstrSrc)
 	{
-		if (!szstrSrc)
-		{
-			return false;
-		}
+		assert(szstrSrc);
 		string& strSrc = *static_cast<string*>(szstrSrc);
 		std::string::iterator it = strSrc.begin();
 		for (; it != strSrc.end();)
@@ -64,10 +56,7 @@ namespace stlu
 	}
 	void trim(void* szstrSrc)
 	{
-		if (!szstrSrc)
-		{
-			return;
-		}
+		assert(szstrSrc);
 		string& strSrc = *static_cast<string*>(szstrSrc);
 
 		std::string::iterator it = strSrc.begin();
@@ -86,6 +75,7 @@ namespace stlu
 
 	void trimLeft(void* szstrSrc, const char* szstrToken /*= "\n"*/)
 	{
+		assert(szstrSrc);
 		string& strSrc = *static_cast<string*>(szstrSrc);
 		string strToken = szstrToken;
 		if (strSrc.empty() || strToken.empty())
@@ -103,6 +93,7 @@ namespace stlu
 
 	void trimRight(void* szstrSrc, const char* szstrToken /*= "\n"*/)
 	{
+		assert(szstrSrc);
 		string& strSrc = *static_cast<string*>(szstrSrc);
 		string strToken = szstrToken;
 
@@ -122,6 +113,7 @@ namespace stlu
 
 	void replace(void* szstrSrc, const char* szorigial, const char* szstrToken)
 	{
+		assert(szstrSrc);
 		string& strSrc = *static_cast<string*>(szstrSrc);
 		string strToken = szstrToken;
 		string origial = szorigial;
@@ -131,7 +123,7 @@ namespace stlu
 		}
 		string drop = strToken;
 		size_t len = origial.length();
-		int index = strSrc.find(origial);
+		size_t index = strSrc.find(origial);
 		while(index > 0)
 		{
 			strSrc.replace(index,index+len,drop);
@@ -172,6 +164,8 @@ namespace stlu
 	}
 	void split(const char* szstrSrc, const char* szstrToken, void* input)
 	{  
+		assert(input);
+
 		string strSrc = szstrSrc;
 		string token = szstrToken;
 		std::vector<std::string>& vStr = *static_cast<vector<string>*>(input);
@@ -194,6 +188,7 @@ namespace stlu
 	}
 	void reverse(void* szstrSrc)
 	{
+		assert(szstrSrc);
 		string &strSrc = *static_cast<string*>(szstrSrc);
 		if(strSrc.empty())
 		{
@@ -203,6 +198,8 @@ namespace stlu
 	}
 	bool extendName(void* input, const char* szstrSrc, const char* szstrToken)
 	{
+		assert(input);
+
 		string strSrc = szstrSrc;
 		string strToken = szstrToken;
 
@@ -225,6 +222,8 @@ namespace stlu
 	}
 	bool complateDir(void* input, const char* szpath, const char* sztoken)
 	{
+		assert(input);
+
 		string path = szpath;
 		string token = sztoken;
 
@@ -251,6 +250,7 @@ namespace stlu
 	}
 	void eraserSuffix(void* szstr)
 	{
+		assert(szstr);
 		string& str = *static_cast<string*>(szstr);
 		if(str.empty())
 		{
@@ -265,6 +265,8 @@ namespace stlu
 	}
 	void eraserLastOf(void* szstr, const char* sztoken)
 	{
+		assert(szstr);
+
 		string& str = *static_cast<string*>(szstr);
 		string token = sztoken;
 
@@ -283,6 +285,7 @@ namespace stlu
 	}
 	void endOfString(void* szstr, const char* sztoken)
 	{
+		assert(szstr);
 		string& str = *static_cast<string*>(szstr);
 		string token = sztoken;
 
@@ -296,6 +299,8 @@ namespace stlu
 	}
 	bool parseFileName(void* input, const char* szpath)
 	{
+		assert(input);
+
 		string path = szpath;
 
 		if(path.empty())
@@ -319,6 +324,7 @@ namespace stlu
 
 	bool parseFileSuffix(void* input, const char* szstrPath)
 	{
+		assert(input);
 		string drop = ".";
 		string strPath = szstrPath;
 
@@ -333,6 +339,7 @@ namespace stlu
 	}
 	bool parseFileBaseName(void* input, const char* strPath)
 	{
+		assert(input);
 		std::string fileName;
 		parseFileName(&fileName,strPath);
 		if(fileName.empty())
@@ -355,12 +362,14 @@ namespace stlu
 	}
 	bool toString(void* input, bool val)
 	{
+		assert(input);
 		*static_cast<string*>(input) = (val ? "1" : "0");
 		return true;
 	}
 
 	bool yesOrNo(void* input, bool val)
 	{
+		assert(input);
 		*static_cast<string*>(input) = (val ? "yes" : "no");
 		return true;
 	}
@@ -588,6 +597,7 @@ namespace stlu
 
 	bool currentDir(void* input)
 	{
+		assert(input);
 		locale loc = std::locale::global(std::locale(""));
 		string strDest; 
 #ifdef WIN32
@@ -642,6 +652,7 @@ namespace stlu
 	}
 	bool moduleDir(void* input)
 	{
+		assert(input);
 		locale loc = std::locale::global(std::locale(""));
 		string strDest;
 #ifdef WIN32
@@ -767,6 +778,7 @@ namespace stlu
 	}
 	bool normalizePath(void* input, const char* szstrDir)
 	{
+		assert(input);
 		std::string strDir = szstrDir;
 		if(strDir.empty())
 		{

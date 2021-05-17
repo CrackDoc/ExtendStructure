@@ -28,9 +28,9 @@ public:
 
 	void CleanupCache();
 
-	int GetCacheCount() const;
+	size_t GetCacheCount() const;
 
-	int GetBufferSize() const;
+	size_t GetBufferSize() const;
 
 	int CopyToBuffer(unsigned char* pBuffer, int nMaxBufferLen) const;
 

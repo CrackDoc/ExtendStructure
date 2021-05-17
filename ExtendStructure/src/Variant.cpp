@@ -1,5 +1,6 @@
 #include "Variant.h"
 #include <string>
+#include <assert.h>
 Variant::Variant():
 	 ptr(NULL)
 	,mSharedMemory(false) 
@@ -161,6 +162,7 @@ void Variant::construct( void* srcPtr,int nSize)
 	mFixedSize = nSize;
 	mSize = nSize;
 	//mType = "void *";
+	assert(srcPtr);
 	memcpy(srcPtr,ptr,nSize);
 }
 
@@ -221,6 +223,7 @@ void* Variant::toVoidPtr() const
 
 void Variant::toString(void *input) const
 {
+	assert(input);
 	*static_cast<std::string*>(input) = *static_cast<std::string*>(ptr);
 }
 

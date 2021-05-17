@@ -1,6 +1,8 @@
 #include "Vector2D.h"
 #include <sstream>
 #include <string>
+#include <assert.h>
+
 const CVector2D CVector2D::ZERO = CVector2D(0,0);
 const CVector2D CVector2D::X_AXIS = CVector2D(1,0);
 const CVector2D CVector2D::Y_AXIS = CVector2D(0,1);
@@ -102,6 +104,7 @@ KFLOAT CVector2D::Sqrt() const
 }
 void CVector2D::ToString(void *input)
 {
+	assert(input);
 	std::stringstream ss;
 	ss << x << "_" << y;
 	std::string xyzstring = ss.str();

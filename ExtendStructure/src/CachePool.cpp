@@ -1,10 +1,14 @@
 #include "CachePool.h"
 #include <vector>
+#include <assert.h>
 
 CCachePool::CCachePool(void* vectorPool)
 	:m_lstBufferObject(vectorPool)
 {
-
+	if (!m_lstBufferObject)
+	{
+		m_lstBufferObject = new std::vector<CCache>();
+	}
 }
 void* CCachePool::GetCache()
 {
@@ -18,12 +22,14 @@ CCachePool::~CCachePool()
 void CCachePool::AppendCacheBuffer( const CCache& rObject )
 {
 	CCache lpcache = rObject;
+	assert(m_lstBufferObject);
 	std::vector<CCache>& vectorCaches = *static_cast<std::vector<CCache>*>(m_lstBufferObject);
 	vectorCaches.push_back(lpcache);
 }
 
 void CCachePool::Travel( CCacheVisitor& rVisitor )
 {
+	assert(m_lstBufferObject);
 	std::vector<CCache>& vectorCaches = *static_cast<std::vector<CCache>*>(m_lstBufferObject);
 
 	std::vector<CCache>::iterator it0 = vectorCaches.begin();
@@ -37,6 +43,7 @@ void CCachePool::Travel( CCacheVisitor& rVisitor )
 
 void CCachePool::CleanupCache()
 {
+	assert(m_lstBufferObject);
 	std::vector<CCache>& vectorCaches = *static_cast<std::vector<CCache>*>(m_lstBufferObject);
 
 	std::vector<CCache>::iterator it0 = vectorCaches.begin();
@@ -49,18 +56,21 @@ void CCachePool::CleanupCache()
 	vectorCaches.clear();
 }
 
-int CCachePool::GetCacheCount() const
+size_t CCachePool::GetCacheCount() const
 {
+	assert(m_lstBufferObject);
 	std::vector<CCache>& vectorCaches = *static_cast<std::vector<CCache>*>(m_lstBufferObject);
 
 	return vectorCaches.size();
 }
 
-int CCachePool::GetBufferSize() const
+size_t CCachePool::GetBufferSize() const
 {
+	assert(m_lstBufferObject);
+
 	std::vector<CCache>& vectorCaches = *static_cast<std::vector<CCache>*>(m_lstBufferObject);
 	std::vector<CCache>::iterator it0 = vectorCaches.begin();
-	int nCount = 0;
+	size_t nCount = 0;
 	for(;it0 != vectorCaches.end();++it0)
 	{
 		CCache &cache = *it0;
@@ -71,6 +81,7 @@ int CCachePool::GetBufferSize() const
 
 int CCachePool::CopyToBuffer( unsigned char* pBuffer, int nMaxBufferLen ) const
 {
+	assert(m_lstBufferObject);
 	CCache cache(pBuffer,nMaxBufferLen,true);
 	std::vector<CCache>& vectorCaches = *static_cast<std::vector<CCache>*>(m_lstBufferObject);
 
