@@ -17,6 +17,10 @@ set(CMAKE_INSTALL_PREFIX ${IDE_PATH} CACHE STRING "Defulat Install prefix" FORCE
 
 SET(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules" CACHE STRING "ModulesPATH" FORCE)
 
+# Detect C++11 compiler support and set a variable.
+INCLUDE(CXX11)
+check_for_cxx11_compiler(CXX11_AVAILABLE)
+
 SET(CMAKE_DEBUG_POSTFIX  "d" CACHE STRING "add a postfix, usually d on windows")
 SET(CMAKE_RELEASE_POSTFIX "" CACHE STRING "add a postfix, usually empty on windows")
 SET(CMAKE_RELWITHDEBINFO_POSTFIX "rd" CACHE STRING "add a postfix, usually empty on windows")
