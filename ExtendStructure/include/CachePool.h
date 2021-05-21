@@ -16,7 +16,7 @@ public:
 	};
 
 public:
-	CCachePool(void *vectorPool);
+	CCachePool();
 
 	~CCachePool();
 

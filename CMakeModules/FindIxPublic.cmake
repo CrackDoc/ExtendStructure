@@ -2,7 +2,7 @@ SET(IxPublic_DIR ${CMAKE_INSTALL_PREFIX}/IxPublic CACHE STRING "settting IxPubli
 
 #SET(IxPublic_DIR "" CACHE PATH "Location of IxPublic")
 
-FIND_PATH(IxPublic_INCLUDE_DIR PublicExport.h
+FIND_PATH(IxPublic_INCLUDE_DIR IxPublicExport.h
 	${IxPublic_DIR}/include
     "${IxPublic_DIR}/Public Headers"
     "$ENV{IxPublic_PATH}/Public Headers"

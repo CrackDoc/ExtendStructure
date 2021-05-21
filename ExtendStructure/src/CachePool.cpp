@@ -2,13 +2,10 @@
 #include <vector>
 #include <assert.h>
 
-CCachePool::CCachePool(void* vectorPool)
-	:m_lstBufferObject(vectorPool)
+CCachePool::CCachePool()
+	:m_lstBufferObject(new std::vector<CCache>())
 {
-	if (!m_lstBufferObject)
-	{
-		m_lstBufferObject = new std::vector<CCache>();
-	}
+
 }
 void* CCachePool::GetCache()
 {

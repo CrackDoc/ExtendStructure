@@ -2,7 +2,7 @@ SET(IxKernel_DIR ${CMAKE_INSTALL_PREFIX}/IxKernel CACHE STRING "settting IxKerne
 
 #SET(IxKernel_DIR "" CACHE PATH "Location of IxKernel")
 
-FIND_PATH(IxKernel_INCLUDE_DIR KernelExport.h
+FIND_PATH(IxKernel_INCLUDE_DIR IxKernelExport.h
 	${IxKernel_DIR}/include
     "${IxKernel_DIR}/Public Headers"
     "$ENV{IxKernel_PATH}/Public Headers"
