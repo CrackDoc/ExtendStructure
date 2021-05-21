@@ -3,7 +3,17 @@
 #include <dirent.h>
 #include <errno.h>
 #include <locale.h>
-
+#ifdef WIN32
+#include <windows.h>
+#include <io.h>
+#include <direct.h>
+#include <codecvt>
+#elif defined __linux__
+#include <unistd.h>
+#include <sys/stat.h> ¡¡
+#include <sys/types.h>
+#elif defined VXWORKS
+#endif
 #include "XDir.h"
 #include "StlUtil.h"
 #include "XFile.h"
@@ -14,7 +24,7 @@
 #include <vector>
 #include <string.h>
 #include <assert.h>
-
+#include "dirent.h"
 using std::locale;  
 
 namespace IOx

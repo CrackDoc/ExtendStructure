@@ -1,18 +1,6 @@
 ﻿#ifndef StlUtil_h__
 #define StlUtil_h__
 
-#ifdef WIN32
-#include <windows.h>
-#include <io.h>
-#include <direct.h>
-#include <codecvt>
-#elif defined __linux__
-#include <unistd.h>
-#include <sys/stat.h> 　
-#include <sys/types.h>
-#elif defined VXWORKS
-#endif
-
 #include "ExtendStructureExport.h"
 
 namespace stlu
