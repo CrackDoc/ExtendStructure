@@ -95,7 +95,7 @@ namespace stlu
 		}
 		string drop = strToken;
 
-		if (strSrc.find(drop) < 0)
+		if ((int)strSrc.find(drop) < 0)
 		{
 			return;
 		}
@@ -114,7 +114,7 @@ namespace stlu
 		}
 
 		string drop = strToken;
-		if(strSrc.find(drop) < 0)
+		if((int)strSrc.find(drop) < 0)
 		{
 			return;
 		}
@@ -125,7 +125,7 @@ namespace stlu
 	void replace(void* szstrSrc, const char* szorigial, const char* szstrToken)
 	{
 		assert(szstrSrc);
-		string& strSrc = *static_cast<string*>(szstrSrc);
+		string &strSrc = *static_cast<string*>(szstrSrc);
 		string strToken = szstrToken;
 		string origial = szorigial;
 		if(strSrc.empty() || origial.empty() || strToken.empty())
@@ -133,12 +133,12 @@ namespace stlu
 			return;
 		}
 		string drop = strToken;
-		size_t len = origial.length();
-		size_t index = strSrc.find(origial);
+		int len = origial.length();
+		int index = (int)strSrc.find_first_of(szorigial);
 		while(index > 0)
 		{
-			strSrc.replace(index,index+len,drop);
-			index = strSrc.find(origial);
+			strSrc.replace(index,len,drop);
+			index = (int)strSrc.find_first_of(szorigial);
 		}
 	}
 
@@ -220,7 +220,7 @@ namespace stlu
 		}
 		string drop = strToken;
 
-		if(strSrc.find(drop) < 0)
+		if((int)strSrc.find(drop) < 0)
 		{
 			return false;
 		}
@@ -236,6 +236,10 @@ namespace stlu
 		assert(input);
 
 		string path = szpath;
+		if ((int)path.find("\\") > 0)
+		{
+			replace(&path, "\\", "/");
+		}
 		string token = sztoken;
 
 		if(path.empty() || token.empty())
@@ -245,7 +249,7 @@ namespace stlu
 		std::string strDest;
 		normalizePath(&strDest,path.c_str());
 
-		if(strDest.find(".") > 0)
+		if((int)strDest.find(".") > 0)
 		{
 			trimRight(&strDest,"/");
 		}
@@ -263,12 +267,16 @@ namespace stlu
 	{
 		assert(szstr);
 		string& str = *static_cast<string*>(szstr);
+		if ((int)str.find("\\") > 0)
+		{
+			replace(&str, "\\", "/");
+		}
 		if(str.empty())
 		{
 			return;
 		}
 		string drop = ".";
-		if(str.find(drop) < 0)
+		if((int)str.find(drop) < 0)
 		{
 			return;
 		}
@@ -279,6 +287,10 @@ namespace stlu
 		assert(szstr);
 
 		string& str = *static_cast<string*>(szstr);
+		if ((int)str.find("\\") > 0)
+		{
+			replace(&str, "\\", "/");
+		}
 		string token = sztoken;
 
 		if(str.empty() || token.empty())
@@ -287,7 +299,7 @@ namespace stlu
 		}
 		string drop = token;
 
-		if(str.find(drop) < 0)
+		if((int)str.find(drop) < 0)
 		{
 			return;
 		}
@@ -298,6 +310,10 @@ namespace stlu
 	{
 		assert(szstr);
 		string& str = *static_cast<string*>(szstr);
+		if ((int)str.find("\\") > 0)
+		{
+			replace(&str, "\\", "/");
+		}
 		string token = sztoken;
 
 		if(str.empty() || token.empty())
@@ -318,11 +334,15 @@ namespace stlu
 		{
 			return false;
 		}
+		if ((int)path.find("\\") > 0)
+		{
+			replace(&path, "\\", "/");
+		}
 		string drop = "/";
 		string strDest;
 		normalizePath(&strDest,path.c_str());
 
-		if(strDest.find(drop) < 0)
+		if((int)strDest.find(drop) < 0)
 		{
 			return false;
 		}
@@ -339,7 +359,12 @@ namespace stlu
 		string drop = ".";
 		string strPath = szstrPath;
 
-		if(strPath.empty() || strPath.find(drop) < 0)
+		if ((int)strPath.find("\\") > 0)
+		{
+			replace(&strPath, "\\", "/");
+		}
+
+		if(strPath.empty() || (int)strPath.find(drop) < 0)
 		{
 			return false;
 		}
@@ -352,14 +377,19 @@ namespace stlu
 	{
 		assert(input);
 		std::string fileName;
-		parseFileName(&fileName,strPath);
+		std::string str = strPath;
+		if ((int)str.find("\\") > 0)
+		{
+			replace(&str, "\\", "/");
+		}
+		parseFileName(&fileName, str.c_str());
 		if(fileName.empty())
 		{
 			return false;
 		}
 		string drop = ".";
 		string strDest = fileName;
-		if(strDest.empty() || strDest.find(drop) < 0)
+		if(strDest.empty() || (int)strDest.find(drop) < 0)
 		{
 			return false;
 		}
@@ -388,6 +418,10 @@ namespace stlu
 	bool fileCreate(const char* szstrFilePath, bool bReplace)
 	{
 		string filePath = szstrFilePath;
+		if ((int)filePath.find("\\") > 0)
+		{
+			replace(&filePath, "\\", "/");
+		}
 		if(filePath.empty())
 		{
 			return false;
@@ -402,7 +436,7 @@ namespace stlu
 			nOk = F_OK;
 	#elif defined VXWORKS
 	#endif // WIN32
-		if(strFilePath.find(".") < 0 || strFilePath.find("/") < 0)
+		if(strFilePath.find(".") < 0 || (int)strFilePath.find("/") < 0)
 		{
 			return false;
 		}
@@ -469,6 +503,11 @@ namespace stlu
 	bool fileExist(const char* szstrFilePath)
 	{
 		string strFilePath = szstrFilePath;
+		if ((int)strFilePath.find("\\") > 0)
+		{
+			replace(&strFilePath, "\\", "/");
+		}
+
 		if(strFilePath.empty())
 		{
 			return false;
@@ -502,7 +541,7 @@ namespace stlu
 		std::string strFilePath;
 		normalizePath(&strFilePath,filePath.c_str());
 
-		if(strFilePath.find(".") < 0 || strFilePath.find("/") < 0)
+		if((int)strFilePath.find(".") < 0 || (int)strFilePath.find("/") < 0)
 		{
 			return -1;
 		}
@@ -525,7 +564,7 @@ namespace stlu
 		}
 		std::string strFilePath;
 		normalizePath(&strFilePath,filePath.c_str());
-		if(strFilePath.find(".") < 0 || strFilePath.find("/") < 0)
+		if((int)strFilePath.find(".") < 0 || (int)strFilePath.find("/") < 0)
 		{
 			return false;
 		}
@@ -544,7 +583,7 @@ namespace stlu
 		std::string strNewPath;
 		normalizePath(&strNewPath,newPath.c_str());
 
-		if(strFilePath.find(".") < 0 || strFilePath.find("/") < 0 || strNewPath.find(".") < 0 || strNewPath.find("/") < 0)
+		if((int)strFilePath.find(".") < 0 || (int)strFilePath.find("/") < 0 || (int)strNewPath.find(".") < 0 || (int)strNewPath.find("/") < 0)
 		{
 			return false;
 		}
@@ -564,7 +603,7 @@ namespace stlu
 		std::string strDstPath;
 		normalizePath(&strDstPath,dstPath.c_str());
 
-		if(strSrcPath.find(".") < 0 || strSrcPath.find("/") < 0 || strDstPath.find(".") < 0 || strDstPath.find("/") < 0)
+		if((int)strSrcPath.find(".") < 0 || (int)strSrcPath.find("/") < 0 || (int)strDstPath.find(".") < 0 || (int)strDstPath.find("/") < 0)
 		{
 			return false;
 		}
@@ -627,7 +666,10 @@ namespace stlu
 #elif defined VXWORKS
 #endif // WIN32
 		locale::global(loc);
-
+		if ((int)strDest.find("\\") > 0)
+		{
+			replace(&strDest, "\\", "/");
+		}
 		if(isEndWith(strDest.c_str(),"/"))
 		{
 			trimRight(&strDest,"/");
@@ -645,7 +687,7 @@ namespace stlu
 		std::string strPath;
 		normalizePath(&strPath,path.c_str());
 
-		if(strPath.find(".") < 0 || strPath.find("/") < 0)
+		if((int)strPath.find(".") < 0 || (int)strPath.find("/") < 0)
 		{
 			return false;
 		}
@@ -672,7 +714,7 @@ namespace stlu
 
 		GetModuleFileName(NULL,exeFullPath,MAX_PATH);
 
-		 strDest = (char*)exeFullPath;
+		 //strDest = (char*)exeFullPath;
 
 #elif defined __linux__
 		ssize_t ret;
@@ -682,6 +724,8 @@ namespace stlu
 #elif defined VXWORKS
 #endif // WIN32
 		locale::global(loc);
+
+		normalizePath(&strDest, (char*)exeFullPath);
 
 		trimRight(&strDest,"/");
 		*static_cast<string*>(input) = *static_cast<string*>(&strDest);
@@ -698,7 +742,7 @@ namespace stlu
 		std::string strDirPath;
 		normalizePath(&strDirPath,dirPath.c_str());
 
-		if(strDirPath.find(".") < 0 || strDirPath.find("/") < 0)
+		if((int)strDirPath.find(".") < 0 || (int)strDirPath.find("/") < 0)
 		{
 			return false;
 		}
@@ -753,7 +797,7 @@ namespace stlu
 		std::string strDirPath;
 		normalizePath(&strDirPath, szstrDirPath);
 
-		if(strDirPath.find(".") < 0 || strDirPath.find("/") < 0)
+		if((int)strDirPath.find(".") < 0 || (int)strDirPath.find("/") < 0)
 		{
 			return false;
 		}
@@ -771,7 +815,7 @@ namespace stlu
 		std::string strDirPath;
 		normalizePath(&strDirPath, szstrDirPath);
 
-		if(strDirPath.find(".") < 0 || strDirPath.find("/") < 0)
+		if((int)strDirPath.find(".") < 0 || (int)strDirPath.find("/") < 0)
 		{
 			return false;
 		}
@@ -791,14 +835,19 @@ namespace stlu
 	{
 		assert(input);
 		std::string strDir = szstrDir;
+		if ((int)strDir.find("\\") > 0)
+		{
+			replace(&strDir, "\\", "/");
+		}
 		if(strDir.empty())
 		{
 			return false;
 		}
-		if(strDir.find("/") < 0)
+		if((int)strDir.find("/") < 0)
 		{
 			return "";
 		}
+
 		std::vector<std::string> Dirs;
 		split(strDir.c_str(), "/", &Dirs);
 
@@ -831,7 +880,7 @@ namespace stlu
 		std::string strFolder;
 		normalizePath(&strFolder,folder.c_str());
 
-		if(strFolder.find("/") < 0)
+		if((int)strFolder.find("/") < 0)
 		{
 			return false;
 		}
