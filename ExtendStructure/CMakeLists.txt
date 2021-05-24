@@ -13,15 +13,19 @@ set(_INC_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../${PROJECT_NAME}/include)
 set(_SRC_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../${PROJECT_NAME}/src)
 
 # 添加执行EXE目录
-aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/../${PROJECT_NAME}/include _INC_EXPATH)
-aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/../${PROJECT_NAME}/src _SRC_EXPATH)
+#aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/../${PROJECT_NAME}/include _INC_EXPATH)
+#aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/../${PROJECT_NAME}/src _SRC_EXPATH)
 
 #-----------------TODO EXE编译连接
 #add_executable (${PROJECT_NAME} ${_INC_EXPATH} ${_SRC_EXPATH})
 
 #-----------------TODO 创建工程内的库
 #-----------------STATIC表示创建静态库，目标文件为 libmylib.a，如果是 SHARED， 则为创建动态库.
-add_library(${PROJECT_NAME} SHARED ${_INC_EXPATH} ${_SRC_EXPATH})
+#add_library(${PROJECT_NAME} SHARED ${_INC_EXPATH} ${_SRC_EXPATH})
+
+file(GLOB_RECURSE HEADER_FILES ${_INC_PATH}/*.h)
+file(GLOB_RECURSE SOURCE_FILES ${_SRC_PATH}/*.cpp)
+add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${HEADER_FILES})
 
 #-----------------TODO添加头文件的搜索目录
 include_directories(${_INC_PATH}
