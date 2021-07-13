@@ -36,7 +36,7 @@ namespace IOx
 
 		XDir dir(filePath);
 
-		strcat_s(mAbsolutePath, dir.absolutePath());
+		strcat(mAbsolutePath, dir.absolutePath());
 
 	}
 
@@ -59,7 +59,7 @@ namespace IOx
 	{
 		memset(mAbsolutePath, '\0', sizeof(char) * 256);
 
-		strcat_s(mAbsolutePath, strPath);
+		strcat(mAbsolutePath, strPath);
 	}
 
 	const char* XDir::DirVisitor::GetAbsolutePath()
@@ -70,7 +70,7 @@ namespace IOx
 	void XDir::DirVisitor::setFilter( const char* rToken )
 	{
 		memset(mFilterToken, '\0', sizeof(char) * 256);
-		strcat_s(mAbsolutePath, rToken);
+		strcat(mAbsolutePath, rToken);
 	}
 	const char* XDir::DirVisitor::filter()
 	{
@@ -78,26 +78,24 @@ namespace IOx
 
 	}
 
-	XDir::XDir(const char* szFilePath)
+	XDir::XDir(const char* szDir)
 	{
 		memset(mAbsolutePath, '\0', sizeof(char) * 256);
 		memset(mRelativePath, '\0', sizeof(char) * 256);
 
-		std::string strDir = szFilePath;
+		std::string strDir = szDir;
 
 		if(!strDir.empty())
 		{
 			std::string dir;
 			stlu::normalizePath(&dir,strDir.c_str());
 
-			stlu::trimRight(&dir,"/");
-
 			// 判断是否是相对路径
 			bool isRelativePath = false;
 			if(stlu::isStartWith(dir.c_str(),"./"))
 			{
 				isRelativePath = true;
-				strcat_s(mRelativePath, dir.c_str());
+				strcat(mRelativePath, dir.c_str());
 
 				stlu::trimLeft(&dir,"./");
 
@@ -105,13 +103,13 @@ namespace IOx
 				std::string pwdString;
 				GetPWD(&pwdString);
 				ss<< pwdString <<"/"<<dir;
-				strcat_s(mAbsolutePath, ss.str().c_str());
+				strcat(mAbsolutePath, ss.str().c_str());
 
 			}
 			else if(stlu::isStartWith(dir.c_str(),"../"))
 			{
 				isRelativePath = true;
-				strcat_s(mRelativePath, dir.c_str());
+				strcat(mRelativePath, dir.c_str());
 
 				std::vector<std::string> splits;
 				stlu::split(dir.c_str(), "../",&splits);
@@ -129,22 +127,20 @@ namespace IOx
 				{
 					ss<<"/"<<splits[i];
 				}
-				strcat_s(mAbsolutePath, ss.str().c_str());
+				strcat(mAbsolutePath, ss.str().c_str());
 			}
 			else
 			{
-				strcat_s(mRelativePath, "./");
+				strcat(mRelativePath, "./");
 				if(dir.empty())
 				{
 					std::string strpwd;
 					GetPWD(&strpwd);
-					strcat_s(mAbsolutePath, strpwd.c_str());
+					strcat(mAbsolutePath, strpwd.c_str());
 				}
 				else
 				{
-					std::string strDDir;
-					stlu::normalizePath(&strDDir, dir.c_str());
-					strcat_s(mAbsolutePath, strDDir.c_str());
+					strcat(mAbsolutePath, dir.c_str());
 				
 				}
 			}
@@ -189,14 +185,12 @@ namespace IOx
 			std::string dir;
 			stlu::normalizePath(&dir, strDir.c_str());
 
-			stlu::trimRight(&dir, "/");
-
 			// 判断是否是相对路径
 			bool isRelativePath = false;
 			if (stlu::isStartWith(dir.c_str(), "./"))
 			{
 				isRelativePath = true;
-				strcat_s(mRelativePath, dir.c_str());
+				strcat(mRelativePath, dir.c_str());
 
 				stlu::trimLeft(&dir, "./");
 
@@ -204,13 +198,13 @@ namespace IOx
 				std::string pwdString;
 				GetPWD(&pwdString);
 				ss << pwdString << "/" << dir;
-				strcat_s(mAbsolutePath, ss.str().c_str());
+				strcat(mAbsolutePath, ss.str().c_str());
 
 			}
 			else if (stlu::isStartWith(dir.c_str(), "../"))
 			{
 				isRelativePath = true;
-				strcat_s(mRelativePath, dir.c_str());
+				strcat(mRelativePath, dir.c_str());
 
 				std::vector<std::string> splits;
 				stlu::split(dir.c_str(), "../", &splits);
@@ -228,22 +222,20 @@ namespace IOx
 				{
 					ss << "/" << splits[i];
 				}
-				strcat_s(mAbsolutePath, ss.str().c_str());
+				strcat(mAbsolutePath, ss.str().c_str());
 			}
 			else
 			{
-				strcat_s(mRelativePath, "./");
+				strcat(mRelativePath, "./");
 				if (dir.empty())
 				{
 					std::string strpwd;
 					GetPWD(&strpwd);
-					strcat_s(mAbsolutePath, strpwd.c_str());
+					strcat(mAbsolutePath, strpwd.c_str());
 				}
 				else
 				{
-					std::string strDDir;
-					stlu::normalizePath(&strDDir, dir.c_str());
-					strcat_s(mAbsolutePath, strDDir.c_str());
+					strcat(mAbsolutePath, dir.c_str());
 
 				}
 			}
@@ -392,7 +384,7 @@ namespace IOx
 		}
 		locale::global(loc);
 	}
-	void find_directory( std::vector<IOx::XDir>& rLstDirs,const std::string& strDirName)
+	void find_directory( std::vector<IOx::XDir>& rLstDirs,const std::string& strDirName,bool bUnder = false)
 	{
 		if(strDirName.empty())
 		{
@@ -462,8 +454,10 @@ namespace IOx
 							std::string strNestDir = buffer;
 
 							rLstDirs.push_back(XDir(strNestDir.c_str()));
-
-							find_directory(rLstDirs,strNestDir);
+							if (!bUnder)
+							{
+								find_directory(rLstDirs, strNestDir);
+							}
 						}
 					}
 
@@ -490,7 +484,9 @@ namespace IOx
 	bool XDir::getAllFiles(void* rLstFile, const char* strFilter)
 	{
 		assert(rLstFile);
-		std::vector<IOx::XFile>& rFiles= *static_cast<std::vector<IOx::XFile>*>(rLstFile);
+		std::vector<IOx::XFile> * rFiles0 = static_cast<std::vector<IOx::XFile>*>(rLstFile);
+		assert(rFiles0);
+		std::vector<IOx::XFile>& rFiles = *rFiles0;
 
 		find_directoryFiles(rFiles,mAbsolutePath,strFilter);
 	
@@ -505,7 +501,18 @@ namespace IOx
 
 		return rDirs.empty()?false:true;
 	}
-	bool XDir::travel( DirVisitor& rVisitor )
+
+	bool XDir::getOneLevelAllDir(void* rLstDir)
+	{
+		std::vector<IOx::XDir>& rDirs = *static_cast<std::vector<IOx::XDir>*>(rLstDir);
+
+		find_directory(rDirs, mAbsolutePath,true);
+
+		return rDirs.empty() ? false : true;
+
+	}
+
+	bool XDir::travel(DirVisitor& rVisitor)
 	{
 		if(std::string(rVisitor.GetAbsolutePath()).empty())
 		{
@@ -737,8 +744,8 @@ namespace IOx
 		{
 			return *this;
 		}
-		strcat_s(mAbsolutePath, "/");
-		strcat_s(mAbsolutePath, strAppendPath);
+		strcat(mAbsolutePath, "/");
+		strcat(mAbsolutePath, strAppendPath);
 		return *this;
 	}
 

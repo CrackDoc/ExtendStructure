@@ -35,8 +35,4 @@ include_directories(${_INC_PATH}
 link_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../${PROJECT_NAME}/lib
     ${CMAKE_CURRENT_SOURCE_DIR}/../lib)
-#-----------------TODO 执行外部命令
-#set(THRIFT_FILE ${CMAKE_CURRENT_SOURCE_DIR}/mythrift.thrift)
-#exec_program("thrift --gen cpp -o ${CMAKE_CURRENT_SOURCE_DIR} ${THRIFT_FILE}")
-
-#-----------------TODO: 如有需要，请添加测试并安装目标。
+	

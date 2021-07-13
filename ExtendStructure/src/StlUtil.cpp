@@ -387,13 +387,17 @@ namespace stlu
 		{
 			return false;
 		}
-		string drop = ".";
 		string strDest = fileName;
-		if(strDest.empty() || (int)strDest.find(drop) < 0)
+		if(strDest.empty())
 		{
 			return false;
 		}
-		strDest.erase(strDest.find_last_of(drop));
+		string drop = ".";
+		int ndx = strDest.find_last_of(drop);
+		if (ndx != -1)
+		{
+			strDest.erase(ndx);
+		}
 		*static_cast<string*>(input) = *static_cast<string*>(&strDest);
 		return true;
 	}
@@ -444,7 +448,7 @@ namespace stlu
 		trimRight(&dirPath,"/");
 		size_t i;
 		char str[256] = {0};
-		strcpy_s(str,dirPath.c_str());//缓存文件路径
+		strcpy(str,dirPath.c_str());//缓存文件路径
 		size_t len = strlen(str);
 		for(i = 0; i<len; i++)
 		{
@@ -742,7 +746,7 @@ namespace stlu
 		std::string strDirPath;
 		normalizePath(&strDirPath,dirPath.c_str());
 
-		if((int)strDirPath.find(".") < 0 || (int)strDirPath.find("/") < 0)
+		if((int)strDirPath.find("/") < 0)
 		{
 			return false;
 		}
@@ -754,37 +758,23 @@ namespace stlu
 		nOk = F_OK;
 #elif defined VXWORKS
 #endif // WIN32
-		size_t i;
-		char str[256];
-
 		std::string strDest = strDirPath;
 
 		if(isEndWith(strDest.c_str(),"/"))
 		{
 			trimRight(&strDest,"/");
 		}
-		strcpy_s(str,strDest.c_str());//缓存文件路径
-		size_t len = strlen(str);
-		for(i = 0; i<len; i++)
+		std::vector<std::string> listDir;
+		split(strDest.c_str(), "/", &listDir);
+
+		std::string strDir;
+		for (int i = 0; i < listDir.size(); ++i)
 		{
-			if( str[i] == '/')
+			strDir.append(listDir[i]);
+			strDir.append("/");
+			if (!dirExist(strDir.c_str()))
 			{
-				str[i] = '\0';
-				if(!dirExist(str))
-				{
-					if(_mkdir(str) < 0)
-					{
-						return false;
-					}
-				}
-				str[i] ='/';
-			}
-		}
-		if( len > 0 && !dirExist(str)) //检测是否创建成功
-		{
-			if(_mkdir(str) < 0)
-			{
-				return false;
+				_mkdir(strDir.c_str());
 			}
 		}
 		locale::global(loc);

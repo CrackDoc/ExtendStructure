@@ -36,7 +36,7 @@ namespace IOx
 			char mAbsolutePath[256];
 		};
     public:
-        XDir(const char *szFilePath = "./");
+        XDir(const char *szDir = "./");
         ~XDir();
 
         bool exist() const;
@@ -53,11 +53,13 @@ namespace IOx
 
 		bool isAbsolutePath();
 
-        //获取目录下所有文件
+        //获取目录下所有文件 参数:std::vector<IOx::XDir>&
         bool getAllFiles(void * rLstFile, const char* strFilter = "*.*") ;
 
-        //获取目录下所有目录
+        //获取目录下所有目录  参数:std::vector<IOx::XDir>&
         bool getAllDir(void * rLstDir);
+		// 参数: std::vector<IOx::XDir>&
+		bool getOneLevelAllDir(void* rLstDir);
 
         //遍历文件目录,(默认递归)
         bool travel(DirVisitor& rVisitor);
@@ -85,16 +87,19 @@ namespace IOx
 		// +目录 [3/19/2016 Administrator]
 		XDir append(const char * strAppendPath);
 
+		// 参数：std::vector<std::string>&
 		bool SplitDir(void *input) const;
-
+		// 参数：std::vector<std::string>&
 		static bool SplitDir(void* input,const char *strPath);
 
 		void Normalize();
 
+		// 参数：std::string &
 		static void Normalize(void *input,const char * strDir);
 
 		XDir createSubDir(const char * strSubDir);
 
+		// 参数：std::string &
 		static void GetPWD(void *input);
 
 	private:
