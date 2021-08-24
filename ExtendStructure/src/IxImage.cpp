@@ -34,7 +34,7 @@ bool CIxImage::LoadFromData(const char *szBuffer,int nLength,bool bDeepCopy )
 	}
 	m_CCache.SetDeepCopy(bDeepCopy);
 	std::string strBuffer = szBuffer;
-	m_CCache.SetBuffer(&strBuffer,nLength);
+    m_CCache.SetBuffer((unsigned char*)strBuffer.c_str(),nLength);
 	return true;
 }
 

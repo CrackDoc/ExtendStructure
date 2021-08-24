@@ -1,5 +1,5 @@
 #include "ExtendStructureConstant.h"
-
+#include <math.h>
 #pragma warning(disable:4305)
 
 #pragma warning(disable:4056)

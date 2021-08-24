@@ -25,7 +25,7 @@ namespace stlu
 	extern ExtendStructure_EXPORT void replace(void* strSrc, const char* origial,const char* strToken);
 
 	// 是否存在 [4/20/2019 kyske]
-	extern ExtendStructure_EXPORT size_t firstToken(const char * strSrc, const char* strToken);
+    extern ExtendStructure_EXPORT int firstToken(const char * strSrc, const char* strToken);
 
 	// 开头是否为 [4/8/2015 Administrator]
 	extern ExtendStructure_EXPORT bool isStartWith(const char* strSrc, const char* strToken);

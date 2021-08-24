@@ -53,7 +53,7 @@ void CCachePool::CleanupCache()
 	vectorCaches.clear();
 }
 
-size_t CCachePool::GetCacheCount() const
+int CCachePool::GetCacheCount() const
 {
 	assert(m_lstBufferObject);
 	std::vector<CCache>& vectorCaches = *static_cast<std::vector<CCache>*>(m_lstBufferObject);
@@ -61,19 +61,20 @@ size_t CCachePool::GetCacheCount() const
 	return vectorCaches.size();
 }
 
-size_t CCachePool::GetBufferSize() const
+int CCachePool::GetBufferSize() const
 {
 	assert(m_lstBufferObject);
 
 	std::vector<CCache>& vectorCaches = *static_cast<std::vector<CCache>*>(m_lstBufferObject);
 	std::vector<CCache>::iterator it0 = vectorCaches.begin();
-	size_t nCount = 0;
+    int nCount = 0;
 	for(;it0 != vectorCaches.end();++it0)
 	{
 		CCache &cache = *it0;
 		nCount += cache.length();
 	}
 	return nCount;
+
 }
 
 int CCachePool::CopyToBuffer( unsigned char* pBuffer, int nMaxBufferLen ) const

@@ -3,6 +3,7 @@
 #include <dirent.h>
 #include <errno.h>
 #include <locale.h>
+
 #ifdef WIN32
 #include <windows.h>
 #include <io.h>
@@ -29,55 +30,6 @@ using std::locale;
 
 namespace IOx
 {
-	XDir::DirVisitor::DirVisitor(const char* filePath)
-	{
-		memset(mAbsolutePath, '\0', sizeof(char) * 256);
-		memset(mFilterToken, '\0', sizeof(char) * 256);
-
-		XDir dir(filePath);
-
-		strcat(mAbsolutePath, dir.absolutePath());
-
-	}
-
-	XDir::DirVisitor::~DirVisitor()
-	{
-
-	}
-
-	bool XDir::DirVisitor::apply( XFile& rFile )
-	{
-		return false;
-	}
-
-	bool XDir::DirVisitor::apply( XDir& rDir )
-	{
-		return false;
-	}
-
-	void XDir::DirVisitor::SetAbsolutePath( const char* strPath )
-	{
-		memset(mAbsolutePath, '\0', sizeof(char) * 256);
-
-		strcat(mAbsolutePath, strPath);
-	}
-
-	const char* XDir::DirVisitor::GetAbsolutePath()
-	{
-		return mAbsolutePath;
-	}
-
-	void XDir::DirVisitor::setFilter( const char* rToken )
-	{
-		memset(mFilterToken, '\0', sizeof(char) * 256);
-		strcat(mAbsolutePath, rToken);
-	}
-	const char* XDir::DirVisitor::filter()
-	{
-		return mFilterToken;
-
-	}
-
 	XDir::XDir(const char* szDir)
 	{
 		memset(mAbsolutePath, '\0', sizeof(char) * 256);
@@ -257,7 +209,13 @@ namespace IOx
 		}
 		return isAbsolute;
 	}
-	void find_directoryFiles(std::vector<IOx::XFile>& rLstDirs,const std::string& strDirName,const std::string& strFilter /*= "*.*"*/ )
+
+	bool XDir::isAbsolutePath()
+	{
+		return isAbsolutePath(mAbsolutePath);
+	}
+
+	void find_directoryFiles(std::vector<IOx::XFile>& rLstDirs, const std::string& strDirName, const std::string& strFilter /*= "*.*"*/)
 	{
 		if(strDirName.empty())
 		{
@@ -512,12 +470,8 @@ namespace IOx
 
 	}
 
-	bool XDir::travel(DirVisitor& rVisitor)
+    bool XDir::travel(IDirVisitor& rVisitor)
 	{
-		if(std::string(rVisitor.GetAbsolutePath()).empty())
-		{
-			return false;
-		}
 		locale loc = std::locale::global(std::locale(""));
 		DIR *dir;
 		char buffer[PATH_MAX + 2];
@@ -526,7 +480,7 @@ namespace IOx
 		char *end = &buffer[PATH_MAX];
 		int ok;
 
-		const char *dirname =  rVisitor.GetAbsolutePath();
+        const char *dirname =  rVisitor.GetAbsolutePath();
 		/* Copy directory name to buffer */
 		src = dirname;
 
@@ -575,26 +529,26 @@ namespace IOx
 						stlu::split(rVisitor.filter(), ".",&splits);
 						if(splits.size() != 2)
 						{
-							rVisitor.apply(XFile(buffer));
+                            rVisitor.applyDir(XFile(buffer));
 						}
 						else
 						{
 							if(strcmp (splits[0].c_str(), "*") == 0 || strcmp (splits[1].c_str(), "*") == 0)
 							{
-								rVisitor.apply(XFile(buffer));
+                                rVisitor.applyDir(XFile(buffer));
 							}
 							else if(strcmp (splits[0].c_str(), "*") != 0 || strcmp (splits[1].c_str(), "*") == 0)
 							{
 								if(stlu::isStartWith(buffer,splits[0].c_str()))
 								{
-									rVisitor.apply(XFile(buffer));
+                                    rVisitor.applyDir(XFile(buffer));
 								}
 							}
 							else if(strcmp (splits[0].c_str(), "*") == 0 || strcmp (splits[1].c_str(), "*") != 0)
 							{
 								if(stlu::isEndWith(buffer,splits[1].c_str()))
 								{
-									rVisitor.apply(XFile(buffer));
+                                    rVisitor.applyDir(XFile(buffer));
 								}
 
 							}
@@ -602,7 +556,7 @@ namespace IOx
 							{
 								if(stlu::isStartWith(buffer,splits[0].c_str()) && stlu::isEndWith(buffer,splits[1].c_str()))
 								{
-									rVisitor.apply(XFile(buffer));
+                                    rVisitor.applyDir(XFile(buffer));
 								}
 							}
 						}
@@ -616,8 +570,8 @@ namespace IOx
 							&&  strcmp (ent->d_name, "..") != 0) 
 						{
 							std::string strNestDir = buffer;
-							rVisitor.apply(XDir(strNestDir.c_str()));
-							rVisitor.SetAbsolutePath(strNestDir.c_str());
+                            rVisitor.applyDir(XDir(strNestDir.c_str()));
+                            rVisitor.setAbsolutePath(strNestDir.c_str());
 							travel(rVisitor);
 						}
 					}

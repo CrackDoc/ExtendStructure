@@ -11,7 +11,7 @@ public:
 	// boost::makeSharePtr<std::string>("hello world") boost 库scope_Ptr 和c++11 unique_Ptr 独占自能在作用域中使用  share_ptr 和weak_ptr 配合使用 可以拷贝,引用计数
 
 	// 在这儿最好使用深拷贝 ,应为CCache 对象不好管理,浅拷贝,多个对象持有m_pBuffer,释放要对空指针进行判空 
-	CCache(void* pBuffer, int nLen, bool bDeepCopy = true);
+    CCache(unsigned char* pBuffer, int nLen, bool bDeepCopy = true);
 
 	CCache(const CCache& rhs);
 
@@ -22,8 +22,6 @@ public:
 	bool operator==(const CCache& rhs) const;
 
 	void operator<<(const char * strBuffer);
-
-	void operator>>(void *input);
 
 	void operator>>(unsigned char &ch);
 
@@ -48,11 +46,11 @@ public:
 	//手动释放空间,浅拷贝也可以删除空间,使用的时候，请保持头脑清醒
 	void ManualDeleteBuffer();
 
-	void* GetBuffer() const;
+    unsigned char* GetBuffer() const;
 
-	size_t length() const;
+    int length() const;
 
-	size_t size() const;
+    int size() const;
 
 	// 强制修改深拷贝标志 [7/17/2019 kyske]
 	void SetDeepCopy(bool bDeepCopy);
@@ -65,14 +63,14 @@ public:
 
 	bool IsEmpty();
 
-	void AttachBuffer(void* pBuffer, size_t nLen);
+    void AttachBuffer(unsigned char* pBuffer, int nLen);
 
-	void SetBuffer(void* pBuffer, size_t nLen);
+    void SetBuffer(unsigned char* pBuffer, int nLen);
 
 protected:
 
-	size_t  m_nBufferLength;
-	void* m_pBuffer;
+    int  m_nBufferLength;
+    unsigned char* m_pBuffer;
 	bool m_bDeepCopy;
 	int m_nIndex;
 };

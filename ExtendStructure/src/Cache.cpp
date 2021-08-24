@@ -2,7 +2,7 @@
 #include <memory>
 #include <string>
 #include <assert.h>
-
+#include <cstring>
 CCache::CCache(bool bDeepCopy):
 	m_bDeepCopy(bDeepCopy)
 	,m_nBufferLength(0)
@@ -11,7 +11,7 @@ CCache::CCache(bool bDeepCopy):
 {
 
 }
-CCache::CCache(void* pBuffer, int nLen, bool bDeepCopy )
+CCache::CCache(unsigned char* pBuffer, int nLen, bool bDeepCopy )
 {
 	assert(pBuffer);
 	m_nIndex = 0;
@@ -39,15 +39,8 @@ CCache::~CCache()
 void CCache::operator<<( const char* szstrBuffer )
 {
 	std::string strBuffer = szstrBuffer;
-	AttachBuffer(&strBuffer,strBuffer.length());
+    AttachBuffer((unsigned char*)strBuffer.c_str(),(int)strBuffer.length());
 }
-
-void CCache::operator>>(void *input )
-{
-	assert(input);
-	*static_cast<std::string*>(input) = *static_cast<std::string*>(m_pBuffer);
-}
-
 void CCache::operator>>( unsigned char &ch )
 {
 	if(m_nIndex >= length())
@@ -156,7 +149,7 @@ void* CCache::operator[]( int i )
 	return (void *)(&m_pBuffer+i);
 }
 
-void CCache::AttachBuffer( void* pBuffer, size_t nLen )
+void CCache::AttachBuffer( unsigned char* pBuffer, int nLen )
 {
 	assert(pBuffer);
 
@@ -178,7 +171,7 @@ void CCache::AttachBuffer( void* pBuffer, size_t nLen )
 	memcpy(pReAlloc,pTmpBuffer,nLen);
 }
 
-void CCache::SetBuffer(void* pBuffer, size_t nLen )
+void CCache::SetBuffer(unsigned char* pBuffer, int nLen )
 {
 	assert(pBuffer);
 	if(!m_bDeepCopy)
@@ -204,17 +197,17 @@ void CCache::ManualDeleteBuffer()
 	 
 }
 
-void* CCache::GetBuffer() const
+unsigned char* CCache::GetBuffer() const
 {
 	return m_pBuffer;
 }
 
-size_t CCache::length() const
+int CCache::length() const
 {
 	return m_nBufferLength;
 }
 
-size_t CCache::size() const
+int CCache::size() const
 {
 	return m_nBufferLength;
 }

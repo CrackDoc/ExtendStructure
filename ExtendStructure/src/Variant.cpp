@@ -1,6 +1,8 @@
 #include "Variant.h"
 #include <string>
 #include <assert.h>
+#include <memory.h>
+
 Variant::Variant():
 	 ptr(NULL)
 	,mSharedMemory(false) 

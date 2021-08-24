@@ -1,4 +1,3 @@
-#pragma once
 #ifndef XDir_h__
 #define XDir_h__
 #include "XFile.h"
@@ -6,34 +5,28 @@
 
 namespace IOx
 {
-	class XFile;
+    class XFile;
     class ExtendStructure_EXPORT XDir
     {
 	public:
-		class  ExtendStructure_EXPORT DirVisitor
+        class  ExtendStructure_EXPORT IDirVisitor
 		{
-		public:
-			DirVisitor(const char* filePath = "./");
-			virtual ~DirVisitor();
+		        public:
+                        virtual ~IDirVisitor() {}
+  
+                        //文件访问
+                        virtual bool applyDir(XFile rFile) = 0;
 
-			//文件访问
-			virtual bool apply(XFile& rFile);
+                        //目录访问
+                        virtual bool applyDir(XDir rDir) = 0;
 
-			//目录访问
-			virtual bool apply(XDir& rDir);
+                        virtual void setFilter(const char * rToken) = 0;
 
-			virtual void SetAbsolutePath(const char * strPath);
+                        virtual const char* filter() = 0;
 
-			virtual const char* GetAbsolutePath();
+                        virtual void setAbsolutePath(const char *filePath) = 0;
 
-			void setFilter(const char * rToken);
-
-			const char* filter();
-
-
-		protected:
-			char mFilterToken[256];
-			char mAbsolutePath[256];
+                        virtual char *GetAbsolutePath() = 0;
 		};
     public:
         XDir(const char *szDir = "./");
@@ -62,7 +55,7 @@ namespace IOx
 		bool getOneLevelAllDir(void* rLstDir);
 
         //遍历文件目录,(默认递归)
-        bool travel(DirVisitor& rVisitor);
+        bool travel(IDirVisitor& rVisitor);
 
         //创建文件
         bool createFile(const char * strFileName);
@@ -104,7 +97,7 @@ namespace IOx
 
 	private:
         char mAbsolutePath[256];
-		char mRelativePath[256];
+        char mRelativePath[256];
     };
 }
 

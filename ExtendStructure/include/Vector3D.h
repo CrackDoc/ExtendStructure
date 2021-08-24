@@ -1,4 +1,3 @@
-#pragma once
 #ifndef CVector3D_h__
 #define CVector3D_h__
 

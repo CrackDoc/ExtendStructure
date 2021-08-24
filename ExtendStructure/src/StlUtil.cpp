@@ -118,7 +118,7 @@ namespace stlu
 		{
 			return;
 		}
-		size_t pos = strSrc.find_last_of(drop);
+        int pos = strSrc.find_last_of(drop);
 		strSrc.erase(pos);
 	}
 
@@ -142,7 +142,7 @@ namespace stlu
 		}
 	}
 
-	size_t firstToken(const char* szstrSrc, const char* szstrToken)
+    int firstToken(const char* szstrSrc, const char* szstrToken)
 	{
 		std::string strSrc = szstrSrc;
 		std::string strToken = szstrToken;
@@ -446,10 +446,10 @@ namespace stlu
 		}
 		std::string dirPath =strFilePath;
 		trimRight(&dirPath,"/");
-		size_t i;
+        int i;
 		char str[256] = {0};
 		strcpy(str,dirPath.c_str());//缓存文件路径
-		size_t len = strlen(str);
+        int len = strlen(str);
 		for(i = 0; i<len; i++)
 		{
 			if( str[i] == '/')
@@ -639,7 +639,7 @@ namespace stlu
 		}
 		while (!feof(fp_filename))
 		{
-			size_t len = fread(buff, sizeof(char), sizeof(buff), fp_filename);
+            int len = fread(buff, sizeof(char), sizeof(buff), fp_filename);
 			fwrite(buff, sizeof(char), len, fp_fileout);
 		}
 		fclose(fp_filename);
@@ -721,7 +721,7 @@ namespace stlu
 		 //strDest = (char*)exeFullPath;
 
 #elif defined __linux__
-		ssize_t ret;
+        sint ret;
 		char *buf[256] = {0};
 		ret =  readlink(“/proc/self/exe”,(char*)buf, sizeof(char)*256);
 		strDest=buf;
@@ -842,7 +842,7 @@ namespace stlu
 		split(strDir.c_str(), "/", &Dirs);
 
 		std::stringstream ss;
-		for(size_t i = 0; i < Dirs.size();++i)
+        for(int i = 0; i < Dirs.size();++i)
 		{
 			if(Dirs[i].empty())
 			{

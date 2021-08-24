@@ -1,11 +1,12 @@
 #include "XFile.h"
 #include "StlUtil.h"
-#include <string>
 #include <sstream>
 #include <vector>
 #include <locale.h>  
 #include <locale>  
 #include <assert.h>
+#include <memory.h>
+#include <cstring>
 using std::locale;  
 
 namespace IOx
@@ -54,7 +55,7 @@ namespace IOx
 		std::string file = std::string(m_Dir->absolutePath()) + "/" + std::string(szstrFileName);
 		std::string strSuffix;
 		stlu::parseFileSuffix(&strSuffix, file.c_str());
-		strcat_s(m_strSuffix, strSuffix.c_str());
+        strcat(m_strSuffix, strSuffix.c_str());
 
 		std::string strBaseName;
 		stlu::parseFileBaseName(&strBaseName, file.c_str());

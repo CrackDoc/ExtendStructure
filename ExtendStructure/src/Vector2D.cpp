@@ -2,6 +2,7 @@
 #include <sstream>
 #include <string>
 #include <assert.h>
+#include <math.h>
 
 const CVector2D CVector2D::ZERO = CVector2D(0,0);
 const CVector2D CVector2D::X_AXIS = CVector2D(1,0);

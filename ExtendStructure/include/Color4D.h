@@ -1,4 +1,4 @@
-#pragma once
+
 #ifndef Color4D_h__
 #define Color4D_h__
 

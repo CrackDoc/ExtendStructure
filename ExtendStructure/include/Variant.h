@@ -1,4 +1,6 @@
-#pragma once
+#ifndef Variant_h__
+#define Variant_h__
+
 
 /*
 	@. brief 多变类型
@@ -130,3 +132,4 @@ void Variant::setValue( const T& val )
         memcpy(&ptr, &val, mSize);
     }
 }
+#endif // Variant_h__
